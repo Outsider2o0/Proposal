@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Proposal: The Gold of East Africa</title>
+    <!-- Chosen Palette: Shea Grove -->
+    <!-- Application Structure Plan: The application uses a full-screen, "scrollnapping" experience. Each logical section of the proposal is a distinct 'slide' that the user snaps to while scrolling. This creates a more focused, cinematic, and memorable user journey. The structure is: Header -> Main (containing 5 full-screen, snap-aligned sections) -> Footer. This enhances user engagement by turning the proposal into an interactive presentation. -->
+    <!-- Visualization & Content Choices: Kept the core interactive elements (Market Chart, Phase Toggles, Financials Chart/Slider) but placed them within the new slide structure. The main interaction is a non-optional, vertical scroll-based animation between slides. This simplification focuses the user on the content without the distraction of choosing an effect. Image placeholders are included in each slide for easy customization. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-background: #F8F9F4; /* Lightest Green-White */
+            --color-text: #3B4432; /* Deep Forest Green */
+            --color-primary-accent: #556B2F; /* Dark Olive Green */
+            --color-secondary-accent: #8FBC8F; /* Dark Sea Green */
+            --color-highlight: #6B8E23; /* Olive Drab */
+        }
+
+        /* Base & Scrollnapping Engine */
+        html {
+            scroll-snap-type: y mandatory;
+            timeline-scope: --section;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--color-background);
+            color: var(--color-text);
+        }
+
+        .section {
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            view-timeline: --section;
+            height: 100dvh;
+            position: relative;
+        }
+
+        .content {
+            overflow: hidden;
+            position: fixed;
+            inset: 0;
+            animation: vertical-scroll ease-in-out both;
+            animation-timeline: --section;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content-inner {
+            width: 100%;
+            max-width: 1200px;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Background Image Placeholder */
+        .bg-image-placeholder {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+            opacity: 0.1;
+        }
+
+        /* Animation Keyframes */
+        @keyframes vertical-scroll {
+            0% { transform: translate3d(0, 100%, 0); }
+            50% { transform: none; }
+            100% { transform: translate3d(0, -100%, 0); }
+        }
+
+        /* Header & Navigation Styling */
+        .site-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(248, 249, 244, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        
+        .indicator {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .indicator a {
+            display: block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--color-text);
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+        .indicator a:hover {
+            opacity: 1;
+        }
+        
+        /* Phase Buttons */
+        .phase-item.active {
+            background-color: var(--color-primary-accent);
+            color: white;
+        }
+
+        /* Utility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+        
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="site-header">
+        <h1 class="text-xl font-bold" style="color: var(--color-primary-accent);">Nilotica Venture</h1>
+        <nav>
+            <ul class="indicator">
+                <li><a href="#hero"><span class="sr-only">Hero</span></a></li>
+                <li><a href="#opportunity"><span class="sr-only">Opportunity</span></a></li>
+                <li><a href="#blueprint"><span class="sr-only">Blueprint</span></a></li>
+                <li><a href="#financials"><span class="sr-only">Financials</span></a></li>
+                <li><a href="#investment"><span class="sr-only">Investment</span></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Slide 1: Hero -->
+        <section id="hero" class="section">
+            <div class="content">
+                <div class="bg-image-placeholder" style="background-image: url('https://placehold.co/1920x1080/F8F9F4/3B4432?text=Add+Your+Image+Here');"></div>
+                <div class="content-inner text-center">
+                    <h1 class="text-4xl md:text-7xl font-extrabold leading-tight">The <span style="color: var(--color-highlight);">Green Gold</span> of East Africa</h1>
+                    <p class="mt-4 text-lg md:text-xl max-w-3xl mx-auto">Capturing the lead in the <span class="font-bold" style="color: var(--color-primary-accent);">$3.75 Billion</span> premium cosmetics ingredient market.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2: Opportunity -->
+        <section id="opportunity" class="section">
+            <div class="content">
+                <div class="bg-image-placeholder" style="background-image: url('https://placehold.co/1920x1080/F8F9F4/3B4432?text=Add+Your+Image+Here');"></div>
+                <div class="content-inner">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl md:text-4xl font-bold">A Market Ready for Disruption</h2>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <div class="grid grid-cols-2 gap-4 text-center">
+                                <div class="bg-white/70 backdrop-blur-sm p-6 rounded-lg shadow-md">
+                                    <h3 class="font-bold text-lg mb-2">West African Shea</h3>
+                                    <p class="text-sm">❌ Hard, waxy texture</p>
+                                    <p class="text-sm">❌ Requires heavy refining</p>
+                                </div>
+                                <div class="p-6 rounded-lg shadow-lg text-white" style="background-color: var(--color-highlight);">
+                                    <h3 class="font-bold text-lg mb-2">East African Nilotica</h3>
+                                    <p class="text-sm">✅ Soft, creamy texture</p>
+                                    <p class="text-sm">✅ Formulation-ready</p>
+                                </div>
+                            </div>
+                            <p class="mt-6 text-base bg-white/70 backdrop-blur-sm p-4 rounded">Nilotica is the superior ingredient formulators need. We are positioned to be the first to offer this premium product at a reliable scale.</p>
+                        </div>
+                        <div class="w-full bg-white/70 backdrop-blur-sm p-4 rounded-lg">
+                            <div class="chart-container">
+                                <canvas id="marketGrowthChart"></canvas>
+                            </div>
+                            <p class="text-center mt-4 text-sm font-semibold">Projected Cosmetic Shea Market Growth (USD)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: Blueprint -->
+        <section id="blueprint" class="section">
+            <div class="content">
+                <div class="bg-image-placeholder" style="background-image: url('https://placehold.co/1920x1080/F8F9F4/3B4432?text=Add+Your+Image+Here');"></div>
+                <div class="content-inner">
+                     <div class="text-center mb-12">
+                        <h2 class="text-3xl md:text-4xl font-bold">Our Blueprint for Execution</h2>
+                        <p class="mt-3 max-w-2xl mx-auto text-lg">A risk-managed ascent, structured in clear phases with decisive checkpoints.</p>
+                    </div>
+                    <div class="flex justify-center space-x-2 md:space-x-4 mb-8">
+                        <button class="phase-item font-bold py-2 px-4 rounded-full transition duration-300" data-phase="phase0">Phase 0</button>
+                        <button class="phase-item font-bold py-2 px-4 rounded-full transition duration-300 active" data-phase="phase1">Phase 1</button>
+                        <button class="phase-item font-bold py-2 px-4 rounded-full transition duration-300" data-phase="phase2">Phase 2</button>
+                    </div>
+                    <div class="max-w-4xl mx-auto bg-white/70 backdrop-blur-sm p-8 rounded-lg shadow-md min-h-[300px]">
+                        <div id="phase0" class="phase-content"></div>
+                        <div id="phase1" class="phase-content open"></div>
+                        <div id="phase2" class="phase-content"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Financials -->
+        <section id="financials" class="section">
+            <div class="content">
+                 <div class="bg-image-placeholder" style="background-image: url('https://placehold.co/1920x1080/F8F9F4/3B4432?text=Add+Your+Image+Here');"></div>
+                 <div class="content-inner">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl md:text-4xl font-bold">The Financial Upside</h2>
+                        <p class="mt-3 max-w-2xl mx-auto text-lg">Interact with the slider to explore the Phase 1 revenue potential.</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                        <div class="w-full bg-white/70 backdrop-blur-sm p-4 rounded-lg">
+                            <div class="chart-container">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="bg-white/70 backdrop-blur-sm p-8 rounded-lg shadow-lg">
+                            <label for="tonnageSlider" class="block font-bold mb-2">Phase 1 Annual Tonnage: <span id="tonnageValue" class="font-extrabold text-xl" style="color: var(--color-highlight);">100</span> tons</label>
+                            <input id="tonnageSlider" type="range" min="50" max="200" value="100" step="10" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" style="accent-color: var(--color-primary-accent);">
+                            <div class="mt-6 border-t pt-6">
+                                <h4 class="font-bold text-lg mb-2">Projected Annual Revenue</h4>
+                                <p class="text-2xl md:text-3xl font-extrabold" id="revenueProjection" style="color: var(--color-primary-accent);">$812,000 - $1,716,000</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Investment -->
+        <section id="investment" class="section">
+             <div class="content">
+                 <div class="bg-image-placeholder" style="background-image: url('https://placehold.co/1920x1080/F8F9F4/3B4432?text=Add+Your+Image+Here');"></div>
+                 <div class="content-inner text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold">The Investment Proposition</h2>
+                    <p class="mt-3 max-w-3xl mx-auto text-lg">A rare opportunity to invest in the creation of a new market category.</p>
+                    <div class="mt-8 bg-white/80 backdrop-blur-sm inline-block p-8 rounded-lg shadow-xl" style="border-top: 4px solid var(--color-highlight);">
+                        <h3 class="text-xl font-bold">We are seeking strategic partners to fund <span style="color: var(--color-primary-accent);">Phase 1</span>.</h3>
+                        <p class="mt-2">Your investment enables the decisive ground-assessment mission that unlocks this entire venture.</p>
+                        <p class="mt-6 font-semibold">[Company Name] | [Email Address] | [Phone Number]</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const financials = {
+        pricePerKg: { low: 8.12, high: 17.16 },
+        tonsToKg: 1000
+    };
+
+    const marketGrowthCtx = document.getElementById('marketGrowthChart').getContext('2d');
+    new Chart(marketGrowthCtx, {
+        type: 'bar',
+        data: {
+            labels: ['2024', '2030 (Projected)'],
+            datasets: [{
+                label: 'Market (USD)',
+                data: [2400, 3750],
+                backgroundColor: ['rgba(143, 188, 143, 0.6)', 'rgba(85, 107, 47, 0.6)'],
+                borderColor: [ 'var(--color-secondary-accent)', 'var(--color-primary-accent)'],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => `${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: 'compact' }).format(c.parsed.y * 1000000)}` } } },
+            scales: { y: { beginAtZero: true, ticks: { callback: (v) => '$' + v + 'B', color: 'var(--color-text)' } }, x: { ticks: { color: 'var(--color-text)' } } }
+        }
+    });
+
+    const phaseData = {
+        phase0: `
+            <h3 class="font-bold text-xl mb-2" style="color: var(--color-primary-accent);">Phase 0: De-Risking Entry</h3>
+            <p class="mb-4">For partners preferring a conservative entry, this optional phase validates the business model in Uganda before any South Sudan operations begin.</p>
+            <ul class="list-disc list-inside space-y-2 text-left">
+                <li><span class="font-semibold">Objective:</span> Validate the business model on a smaller, lower-risk scale.</li>
+                <li><span class="font-semibold">Action:</span> Establish a proof-of-concept operation in Northern Uganda.</li>
+                <li><span class="font-semibold">Outcome:</span> Generate initial revenue (20-30 tons) and establish B2B sales cycles.</li>
+            </ul>`,
+        phase1: `
+            <h3 class="font-bold text-xl mb-2" style="color: var(--color-primary-accent);">Phase 1: Secure the Source & Launch</h3>
+            <p class="mb-4">This phase proves the viability of the South Sudanese resource base and establishes our initial market presence.</p>
+            <ul class="list-disc list-inside space-y-2 text-left">
+                <li><span class="font-semibold">Go/No-Go Mission:</span> Deploy a ground team to map resources in South Sudan. <span class="block text-white font-bold p-2 rounded mt-1" style="background-color: var(--color-highlight);">CRITICAL CHECKPOINT</span></li>
+                <li><span class="font-semibold">Pilot Run:</span> Launch a pilot harvest to prove logistics from field to processing in Kenya.</li>
+                <li><span class="font-semibold">Market Strike:</span> Secure foundational B2B contracts with high-quality pilot batches.</li>
+            </ul>`,
+        phase2: `
+            <h3 class="font-bold text-xl mb-2" style="color: var(--color-primary-accent);">Phase 2: Solidify Dominance & Scale</h3>
+            <p class="mb-4">With a proven model, this phase transitions the venture into the undisputed market leader.</p>
+            <ul class="list-disc list-inside space-y-2 text-left">
+                <li><span class="font-semibold">Cultivation:</span> Invest in our own Nilotica plantations for a perpetual, scalable supply.</li>
+                <li><span class="font-semibold">Vertical Integration:</span> Evaluate building a proprietary processing facility in Kenya.</li>
+                <li><span class="font-semibold">Global Expansion:</span> Target multinational cosmetic corporations.</li>
+            </ul>`
+    };
+
+    const phaseButtons = document.querySelectorAll('.phase-item');
+    const phaseContents = document.querySelectorAll('.phase-content');
+    
+    function setPhaseContent(phaseId) {
+        phaseContents.forEach(content => {
+            if (content.id === phaseId) {
+                content.innerHTML = phaseData[phaseId];
+                content.classList.add('open');
+            } else {
+                content.innerHTML = '';
+                content.classList.remove('open');
+            }
+        });
+    }
+
+    phaseButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetPhase = button.dataset.phase;
+            phaseButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            setPhaseContent(targetPhase);
+        });
+    });
+    
+    setPhaseContent('phase1');
+
+
+    const tonnageSlider = document.getElementById('tonnageSlider');
+    const tonnageValue = document.getElementById('tonnageValue');
+    const revenueProjection = document.getElementById('revenueProjection');
+    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+    
+    const revenueChart = new Chart(revenueCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Low End', 'High End'],
+            datasets: [{
+                data: [812000, 1716000],
+                backgroundColor: ['rgba(143, 188, 143, 0.6)', 'rgba(85, 107, 47, 0.6)'],
+                borderColor: ['var(--color-secondary-accent)', 'var(--color-primary-accent)'],
+                borderWidth: 2,
+            }]
+        },
+        options: {
+            indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(c.parsed.x) } } },
+            scales: { x: { ticks: { callback: (v) => new Intl.NumberFormat('en-US', { notation: 'compact' }).format(v), color: 'var(--color-text)' } }, y: { ticks: { color: 'var(--color-text)' } } }
+        }
+    });
+
+    function updateFinancials() {
+        const tons = parseInt(tonnageSlider.value);
+        tonnageValue.textContent = tons;
+        const lowRevenue = tons * financials.tonsToKg * financials.pricePerKg.low;
+        const highRevenue = tons * financials.tonsToKg * financials.pricePerKg.high;
+        const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
+        revenueProjection.textContent = `${formatter.format(lowRevenue)} - ${formatter.format(highRevenue)}`;
+        revenueChart.data.datasets[0].data = [lowRevenue, highRevenue];
+        revenueChart.update();
+    }
+
+    tonnageSlider.addEventListener('input', updateFinancials);
+});
+</script>
+
+</body>
+</html>
